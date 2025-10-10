@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Recharge</title>
+    <link rel="stylesheet" href="css/deposit.css">
+</head>
+<body>
+    <div class="recharge-container">
+        <!-- Header -->
+        <div class="recharge-header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.location.href='Welcomepage.html'">← Back</button>
+                <h1>💰 Make Recharge</h1>
+            </div>
+            <p class="header-subtitle">Choose your investment level and payment method</p>
+        </div>
+
+        <!-- Deposit Options -->
+        <div class="recharge-content">
+            <!-- Level Selection -->
+            <div class="section">
+                <h2 class="section-title">📈 Select Investment Level</h2>
+                <div class="level-options">
+                    <!-- Level 1 Worker -->
+                    <div class="level-card" data-level="worker" data-amount="75000">
+                        <div class="level-header">
+                            <div class="level-icon">💼</div>
+                            <div class="level-info">
+                                <h3>Level 1 Worker</h3>
+                                <span class="level-badge worker">Level 2</span>
+                            </div>
+                        </div>
+                        <div class="level-details">
+                            <div class="investment-amount">UGX 75,000</div>
+                            <div class="level-benefits">
+                                <p>✅ UGX 500 per task</p>
+                                <p>✅ 5 tasks daily</p>
+                                <p>✅ UGX 2,500 daily earning</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Senior Worker -->
+                    <div class="level-card" data-level="senior" data-amount="250000">
+                        <div class="level-header">
+                            <div class="level-icon">⭐</div>
+                            <div class="level-info">
+                                <h3>Senior Worker</h3>
+                                <span class="level-badge senior">Level 3</span>
+                            </div>
+                        </div>
+                        <div class="level-details">
+                            <div class="investment-amount">UGX 250,000</div>
+                            <div class="level-benefits">
+                                <p>✅ UGX 1,600 per task</p>
+                                <p>✅ 15 tasks daily</p>
+                                <p>✅ UGX 8,000 daily earning</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expert Worker -->
+                    <div class="level-card" data-level="expert" data-amount="650000">
+                        <div class="level-header">
+                            <div class="level-icon">👑</div>
+                            <div class="level-info">
+                                <h3>Expert Worker</h3>
+                                <span class="level-badge expert">Level 4</span>
+                            </div>
+                        </div>
+                        <div class="level-details">
+                            <div class="investment-amount">UGX 650,000</div>
+                            <div class="level-benefits">
+                                <p>✅ UGX 4,200 per task</p>
+                                <p>✅ 5 tasks daily</p>
+                                <p>✅ UGX 21,000 daily earning</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="section" id="paymentSection" style="display: none;">
+                <h2 class="section-title">💳 Select Payment Method</h2>
+                <div class="payment-options">
+                    <!-- Mobile Money -->
+                    <div class="payment-card" data-method="mobile">
+                        <div class="payment-icon">📱</div>
+                        <div class="payment-info">
+                            <h3>Mobile Money</h3>
+                            <p>MTN, Airtel, Uganda Telecom</p>
+                        </div>
+                        <div class="payment-select">→</div>
+                    </div>
+
+                    <!-- Bank Transfer -->
+                    <div class="payment-card disabled" data-method="bank">
+                        <div class="payment-icon">🏦</div>
+                        <div class="payment-info">
+                            <h3>Bank Transfer</h3>
+                            <p>Coming Soon</p>
+                        </div>
+                        <div class="payment-select">🚧</div>
+                    </div>
+
+                    <!-- WePay -->
+                    <div class="payment-card disabled" data-method="wepay">
+                        <div class="payment-icon">💎</div>
+                        <div class="payment-info">
+                            <h3>WePay</h3>
+                            <p>Coming Soon</p>
+                        </div>
+                        <div class="payment-select">🚧</div>
+                    </div>
+
+                    <!-- Crypto -->
+                    <div class="payment-card disabled" data-method="crypto">
+                        <div class="payment-icon">₿</div>
+                        <div class="payment-info">
+                            <h3>Cryptocurrency</h3>
+                            <p>Coming Soon</p>
+                        </div>
+                        <div class="payment-select">🚧</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deposit Summary -->
+            <div class="section" id="summarySection" style="display: none;">
+                <h2 class="section-title">📋 Recharge Summary</h2>
+                <div class="summary-card">
+                    <div class="summary-item">
+                        <span class="summary-label">Selected Level:</span>
+                        <span class="summary-value" id="selectedLevel">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Investment Amount:</span>
+                        <span class="summary-value" id="rechargeAmount">UGX 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Payment Method:</span>
+                        <span class="summary-value" id="paymentMethod">-</span>
+                    </div>
+                    
+                    <!-- Account Details Section -->
+                    <div class="account-details">
+                        <div class="account-header">📱 Send Payment To:</div>
+                        <div class="account-info">
+                            <div class="account-number">0776944322</div>
+                            <div class="account-name">Buttura Isaiah</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-item total">
+                        <span class="summary-label">Total to Pay:</span>
+                        <span class="summary-value" id="totalAmount">UGX 0</span>
+                    </div>
+                </div>
+                
+                <button class="proceed-btn" id="proceedBtn">
+                    <span class="btn-icon">🚀</span>
+                    <span class="btn-text">Proceed to Payment</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="Welcomepage.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span class="nav-label">Jobs</span>
+            </a>
+            <a href="tasks-intern.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="deposit.html" class="nav-item active">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Recharge</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/deposit.js"></script>
+</body>
+</html>

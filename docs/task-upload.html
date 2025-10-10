@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Task Upload</title>
+    <link rel="stylesheet" href="css/task-upload.css">
+</head>
+<body>
+    <div class="upload-container">
+        <!-- Header -->
+        <div class="upload-header">
+            <div class="header-top">
+                <div class="header-nav">
+                    <button class="back-btn" onclick="window.location.href='Welcomepage.html'">← Back</button>
+                    <a href="admin-approval.html" class="admin-link">✅ Manage Approvals</a>
+                </div>
+                <h1>📤 Upload Tasks</h1>
+            </div>
+            <p class="header-subtitle">Create and manage tasks for all job levels</p>
+        </div>
+
+        <!-- Upload Content -->
+        <div class="upload-content">
+            <!-- Task Level Selection -->
+            <div class="section">
+                <h2 class="section-title">🎯 Select Target Level</h2>
+                <div class="level-selector">
+                    <div class="level-option" data-level="intern">
+                        <div class="level-icon">🎓</div>
+                        <div class="level-info">
+                            <h3>Intern Level</h3>
+                            <p>UGX 500 per task • 5 tasks daily</p>
+                        </div>
+                        <div class="level-badge intern">Level 1</div>
+                    </div>
+                    
+                    <div class="level-option" data-level="worker">
+                        <div class="level-icon">💼</div>
+                        <div class="level-info">
+                            <h3>Level 1 Worker</h3>
+                            <p>UGX 500 per task • 5 tasks daily</p>
+                        </div>
+                        <div class="level-badge worker">Level 2</div>
+                    </div>
+                    
+                    <div class="level-option" data-level="senior">
+                        <div class="level-icon">⭐</div>
+                        <div class="level-info">
+                            <h3>Senior Worker</h3>
+                            <p>UGX 1,600 per task • 15 tasks daily</p>
+                        </div>
+                        <div class="level-badge senior">Level 3</div>
+                    </div>
+                    
+                    <div class="level-option" data-level="expert">
+                        <div class="level-icon">👑</div>
+                        <div class="level-info">
+                            <h3>Expert Worker</h3>
+                            <p>UGX 4,200 per task • 5 tasks daily</p>
+                        </div>
+                        <div class="level-badge expert">Level 4</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Upload Form -->
+            <div class="section" id="uploadForm" style="display: none;">
+                <h2 class="section-title">📝 Task Details</h2>
+                <div class="form-card">
+                    <form id="taskForm">
+                        <div class="selected-level-display" id="selectedLevelDisplay">
+                            <!-- Selected level will be shown here -->
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskTitle">Task Title *</label>
+                                <input type="text" id="taskTitle" name="taskTitle" placeholder="Enter task title" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="taskPrice">Task Price (UGX) *</label>
+                                <input type="number" id="taskPrice" name="taskPrice" placeholder="500" required readonly>
+                            </div>
+                            <div class="form-group half">
+                                <label for="taskCategory">Category</label>
+                                <select id="taskCategory" name="taskCategory">
+                                    <option value="data-entry">Data Entry</option>
+                                    <option value="social-media">Social Media</option>
+                                    <option value="content-writing">Content Writing</option>
+                                    <option value="surveys">Surveys</option>
+                                    <option value="research">Research</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskDescription">Task Description *</label>
+                                <textarea id="taskDescription" name="taskDescription" rows="4" placeholder="Describe what users need to do to complete this task" required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskImage">Task Image</label>
+                                <div class="image-upload-area" id="imageUploadArea">
+                                    <input type="file" id="taskImage" name="taskImage" accept="image/*" hidden>
+                                    <div class="upload-placeholder">
+                                        <div class="upload-icon">📷</div>
+                                        <p>Click to upload task image</p>
+                                        <span class="upload-hint">PNG, JPG, GIF up to 5MB</span>
+                                    </div>
+                                    <div class="image-preview" id="imagePreview" style="display: none;">
+                                        <img id="previewImg" src="" alt="Task preview">
+                                        <button type="button" class="remove-image" id="removeImage">×</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="taskDuration">Estimated Duration</label>
+                                <select id="taskDuration" name="taskDuration">
+                                    <option value="5">5 minutes</option>
+                                    <option value="10">10 minutes</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="60">1 hour</option>
+                                </select>
+                            </div>
+                            <div class="form-group half">
+                                <label for="taskQuantity">Number of Tasks</label>
+                                <input type="number" id="taskQuantity" name="taskQuantity" value="1" min="1" max="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskInstructions">Special Instructions</label>
+                                <textarea id="taskInstructions" name="taskInstructions" rows="3" placeholder="Any special instructions or requirements for completing this task"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="cancelUpload()">Cancel</button>
+                            <button type="submit" class="btn-upload">
+                                <span class="btn-icon">🚀</span>
+                                <span class="btn-text">Upload Task</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Upload Success -->
+            <div class="section" id="successSection" style="display: none;">
+                <div class="success-card">
+                    <div class="success-icon">✅</div>
+                    <h3>Task Uploaded Successfully!</h3>
+                    <p id="successMessage">Your task has been uploaded and is now available for users.</p>
+                    <div class="success-actions">
+                        <button class="btn-view-tasks" id="viewTasksBtn">View Tasks</button>
+                        <button class="btn-upload-another" onclick="uploadAnother()">Upload Another</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Uploads -->
+            <div class="section">
+                <h2 class="section-title">📊 Recent Uploads</h2>
+                <div class="recent-uploads" id="recentUploads">
+                    <!-- Recent uploads will be loaded dynamically -->
+                    <div class="upload-item">
+                        <div class="upload-icon">📝</div>
+                        <div class="upload-details">
+                            <h4>Data Entry Task #1</h4>
+                            <p>Intern Level • UGX 500 • 2 hours ago</p>
+                        </div>
+                        <div class="upload-status active">Active</div>
+                    </div>
+                    
+                    <div class="upload-item">
+                        <div class="upload-icon">📱</div>
+                        <div class="upload-details">
+                            <h4>Social Media Engagement</h4>
+                            <p>Level 1 Worker • UGX 500 • 1 day ago</p>
+                        </div>
+                        <div class="upload-status active">Active</div>
+                    </div>
+                    
+                    <div class="upload-item">
+                        <div class="upload-icon">✍️</div>
+                        <div class="upload-details">
+                            <h4>Content Writing Task</h4>
+                            <p>Senior Worker • UGX 1,600 • 2 days ago</p>
+                        </div>
+                        <div class="upload-status completed">Completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="Welcomepage.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span class="nav-label">Jobs</span>
+            </a>
+            <a href="tasks-intern.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="task-upload.html" class="nav-item active">
+                <span class="nav-icon">📤</span>
+                <span class="nav-label">Upload</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/task-upload.js"></script>
+</body>
+</html>

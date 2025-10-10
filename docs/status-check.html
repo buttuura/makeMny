@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Approval Status - GetCash</title>
+    <link rel="stylesheet" href="css/status-check.css">
+</head>
+<body>
+    <div class="status-container">
+        <!-- Header -->
+        <div class="status-header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.location.href='Welcomepage.html'">← Back</button>
+                <h1>🔍 Check Status</h1>
+            </div>
+            <p class="header-subtitle">Check your deposit approval status</p>
+        </div>
+
+        <!-- Status Check Form -->
+        <div class="status-content">
+            <div class="check-section">
+                <h2>Enter Your Details</h2>
+                <form id="statusForm" class="status-form">
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" placeholder="+256 XXX XXX XXX" required>
+                        <small>Enter the phone number used for your deposit</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depositId">Deposit ID (Optional)</label>
+                        <input type="text" id="depositId" placeholder="DEP12345">
+                        <small>If you have your deposit ID, enter it here</small>
+                    </div>
+                    
+                    <button type="submit" class="check-btn">
+                        🔍 Check Status
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Status Result -->
+            <div id="statusResult" class="status-result" style="display: none;">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/status-check.js"></script>
+</body>
+</html>

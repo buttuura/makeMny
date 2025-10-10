@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Jobs</title>
+    <link rel="stylesheet" href="css/jobs.css">
+</head>
+<body>
+    <div class="jobs-container">
+        <!-- Header -->
+        <div class="jobs-header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.location.href='Welcomepage.html'">← Back</button>
+                <div class="header-content">
+                    <h1>💼 Job Levels</h1>
+                    <p>Choose your career path and start earning more</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jobs Grid Container -->
+        <div class="jobs-grid">
+            <!-- Section 1: Train Yourself (Trainee) -->
+            <div class="job-section trainee">
+                <div class="job-title">
+                    <div class="job-icon">🎓</div>
+                    <div>
+                        <h3>Train Yourself</h3>
+                        <span class="status-badge status-current">CURRENT</span>
+                    </div>
+                    <div class="job-level">Level 1</div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Per Order</div>
+                        <div class="detail-value earning-highlight">UGX 500</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Tasks</div>
+                        <div class="detail-value">5 Tasks</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Earnings</div>
+                        <div class="detail-value earning-highlight">UGX 2,000</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Investment Required</div>
+                        <div class="detail-value input-highlight">UGX 0</div>
+                    </div>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requirements:</h4>
+                    <ul>
+                        <li>Complete account registration</li>
+                        <li>No investment required</li>
+                        <li>Perfect for beginners</li>
+                    </ul>
+                </div>
+                
+                <button class="action-button current-level">✅ Current Level</button>
+            </div>
+
+            <!-- Section 2: Junior Worker -->
+            <div class="job-section junior">
+                <div class="job-title">
+                    <div class="job-icon">👨‍💼</div>
+                    <div>
+                        <h3>Junior Worker</h3>
+                        <span class="status-badge status-available">AVAILABLE</span>
+                    </div>
+                    <div class="job-level">Level 2</div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Per Order</div>
+                        <div class="detail-value earning-highlight">UGX 500</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Tasks</div>
+                        <div class="detail-value">5 Tasks</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Earnings</div>
+                        <div class="detail-value earning-highlight">UGX 2,000</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Investment Required</div>
+                        <div class="detail-value input-highlight">UGX 70,000</div>
+                    </div>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requirements:</h4>
+                    <ul>
+                        <li>Complete at least 10 tasks in trainee level</li>
+                        <li>Investment of UGX 75,000</li>
+                        <li>Maintain 95% task completion rate</li>
+                    </ul>
+                </div>
+                
+                <button class="action-button upgrade-available" data-investment="75000" data-job="Junior Worker">🚀 Upgrade to Junior</button>
+            </div>
+
+            <!-- Section 3: Senior Worker -->
+            <div class="job-section senior">
+                <div class="job-title">
+                    <div class="job-icon">👨‍💻</div>
+                    <div>
+                        <h3>Senior Worker</h3>
+                        <span class="status-badge status-available">AVAILABLE</span>
+                    </div>
+                    <div class="job-level">Level 3</div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Per Order</div>
+                        <div class="detail-value earning-highlight">UGX 1,000</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Tasks</div>
+                        <div class="detail-value">10 Tasks</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Earnings</div>
+                        <div class="detail-value earning-highlight">UGX 6,000</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Investment Required</div>
+                        <div class="detail-value input-highlight">UGX 250,000</div>
+                    </div>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requirements:</h4>
+                    <ul>
+                        <li>Complete 30 days as Junior Worker</li>
+                        <li>Investment of UGX 250,000</li>
+                        <li>Maintain 98% task completion rate</li>
+                    </ul>
+                </div>
+                
+                <button class="action-button upgrade-available" data-investment="250000" data-job="Senior Worker">⭐ Upgrade to Senior</button>
+            </div>
+
+            <!-- Section 4: Expert Worker -->
+            <div class="job-section expert">
+                <div class="job-title">
+                    <div class="job-icon">🏆</div>
+                    <div>
+                        <h3>Expert Worker</h3>
+                        <span class="status-badge status-locked">LOCKED</span>
+                    </div>
+                    <div class="job-level">Level 4</div>
+                </div>
+                
+                <div class="job-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Per Order</div>
+                        <div class="detail-value earning-highlight">UGX 1,200</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Tasks</div>
+                        <div class="detail-value">20 Tasks</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Earnings</div>
+                        <div class="detail-value earning-highlight">UGX 15,000</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Investment Required</div>
+                        <div class="detail-value input-highlight">UGX 650,000</div>
+                    </div>
+                </div>
+                
+                <div class="requirements">
+                    <h4>📋 Requirements:</h4>
+                    <ul>
+                        <li>Complete 60 days as Senior Worker</li>
+                        <li>Investment of UGX 650,000</li>
+                        <li>Perfect task completion record</li>
+                    </ul>
+                </div>
+                
+                <button class="action-button disabled" data-investment="650000" data-job="Expert Worker">🔒 Requires Senior Level</button>
+            </div>
+
+    <script src="js/jobs.js"></script>
+</body>
+</html>

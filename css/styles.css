@@ -1,0 +1,653 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 100px;
+}
+
+.hero-section {
+    height: 50vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('../../images/Currency2.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.welcome-content {
+    max-width: 800px;
+    padding: 1.5rem;
+    z-index: 2;
+}
+
+.welcome-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 1rem;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+.welcome-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1.5s ease-out 0.5s both;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 1.5s ease-out 1s both;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Main buttons section */
+.main-buttons-section {
+    height: 50vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin-bottom: 100px;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.main-btn {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeInUp 1.5s ease-out 1.5s both;
+}
+
+.main-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon {
+    font-size: 3rem;
+    display: block;
+}
+
+.btn-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.jobs-btn:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.jobs-btn:hover .btn-text {
+    color: white;
+}
+
+.tasks-btn:hover {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.tasks-btn:hover .btn-text {
+    color: white;
+}
+
+.recharge-btn:hover {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.recharge-btn:hover .btn-text {
+    color: white;
+}
+
+/* Extra Large Devices (Large Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .welcome-content {
+        max-width: 1000px;
+        padding: 2rem;
+    }
+    
+    .welcome-title {
+        font-size: 4rem;
+        letter-spacing: 4px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.4rem;
+    }
+    
+    .buttons-container {
+        max-width: 1000px;
+        gap: 3rem;
+    }
+    
+    .main-btn {
+        min-width: 220px;
+        padding: 2.5rem 2rem;
+    }
+    
+    .btn-icon {
+        font-size: 3.5rem;
+    }
+    
+    .btn-text {
+        font-size: 1.6rem;
+    }
+}
+
+/* Large Devices (Desktops, 992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .welcome-title {
+        font-size: 3.2rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.15rem;
+    }
+    
+    .main-btn {
+        min-width: 200px;
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Medium Devices (Tablets, 768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .welcome-title {
+        font-size: 2.8rem;
+        letter-spacing: 2px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .welcome-content {
+        padding: 1.2rem;
+    }
+    
+    .buttons-container {
+        gap: 1.8rem;
+    }
+    
+    .main-btn {
+        min-width: 180px;
+        padding: 1.8rem 1.3rem;
+    }
+    
+    .btn-icon {
+        font-size: 2.8rem;
+    }
+    
+    .btn-text {
+        font-size: 1.4rem;
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px to 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+    .hero-section {
+        height: 45vh;
+    }
+    
+    .main-buttons-section {
+        height: 55vh;
+        padding: 1.5rem;
+    }
+    
+    .welcome-title {
+        font-size: 2.2rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .welcome-content {
+        padding: 1rem;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    
+    .main-btn {
+        min-width: 280px;
+        padding: 1.5rem;
+    }
+    
+    .btn-icon {
+        font-size: 2.5rem;
+    }
+    
+    .btn-text {
+        font-size: 1.3rem;
+    }
+}
+
+/* Extra Small Devices (Portrait Phones, up to 575px) */
+@media (max-width: 575px) {
+    .hero-section {
+        height: 40vh;
+    }
+    
+    .main-buttons-section {
+        height: 60vh;
+        padding: 1rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .welcome-content {
+        padding: 0.8rem;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        gap: 1.2rem;
+        align-items: center;
+    }
+    
+    .main-btn {
+        min-width: 260px;
+        padding: 1.3rem;
+    }
+    
+    .btn-icon {
+        font-size: 2.2rem;
+    }
+    
+    .btn-text {
+        font-size: 1.2rem;
+    }
+    
+    .main-buttons-section {
+        margin-bottom: 85px;
+    }
+}
+
+/* Fixed Footer */
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 0.8rem 0;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 0.5rem;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    flex: 1;
+    max-width: 80px;
+}
+
+.nav-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.nav-btn.active {
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    display: block;
+}
+
+.nav-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.home-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.withdraw-btn:hover {
+    background: rgba(245, 87, 108, 0.1);
+}
+
+.deposit-btn:hover {
+    background: rgba(79, 172, 254, 0.1);
+}
+
+.profile-btn:hover {
+    background: rgba(160, 174, 192, 0.1);
+}
+
+/* Landscape Orientation for Mobile Devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        height: 60vh;
+    }
+    
+    .main-buttons-section {
+        height: 40vh;
+        padding: 1rem;
+    }
+    
+    .welcome-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .buttons-container {
+        flex-direction: row;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .main-btn {
+        min-width: 150px;
+        padding: 1rem 0.8rem;
+        flex: 1;
+        max-width: 180px;
+    }
+    
+    .btn-icon {
+        font-size: 1.8rem;
+    }
+    
+    .btn-text {
+        font-size: 1rem;
+    }
+    
+    body {
+        padding-bottom: 75px;
+    }
+    
+    .fixed-footer {
+        padding: 0.4rem 0;
+    }
+}
+
+
+
+/* Footer Responsive Design */
+@media (max-width: 767px) {
+    .fixed-footer {
+        padding: 0.6rem 0;
+    }
+    
+    .nav-icon {
+        font-size: 1.4rem;
+    }
+    
+    .nav-text {
+        font-size: 0.7rem;
+    }
+    
+    .nav-btn {
+        max-width: 75px;
+        padding: 0.45rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        height: 35vh;
+    }
+    
+    .main-buttons-section {
+        height: 65vh;
+        padding: 0.8rem;
+        margin-bottom: 85px;
+    }
+    
+    .welcome-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.6rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .welcome-content {
+        padding: 0.6rem;
+    }
+    
+    .main-btn {
+        min-width: 240px;
+        padding: 1.2rem;
+    }
+    
+    .btn-icon {
+        font-size: 2rem;
+    }
+    
+    .btn-text {
+        font-size: 1.1rem;
+    }
+    
+    .buttons-container {
+        gap: 1rem;
+    }
+    
+    .nav-text {
+        font-size: 0.65rem;
+    }
+    
+    .nav-icon {
+        font-size: 1.3rem;
+    }
+    
+    .nav-btn {
+        padding: 0.4rem;
+        max-width: 70px;
+    }
+    
+    body {
+        padding-bottom: 85px;
+    }
+}
+
+/* Ultra Small Devices (Very Small Phones, up to 360px) */
+@media (max-width: 360px) {
+    .welcome-title {
+        font-size: 1.3rem;
+        letter-spacing: 0px;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .main-btn {
+        min-width: 220px;
+        padding: 1rem;
+    }
+    
+    .btn-icon {
+        font-size: 1.8rem;
+    }
+    
+    .btn-text {
+        font-size: 1rem;
+    }
+    
+    .nav-icon {
+        font-size: 1.2rem;
+    }
+    
+    .nav-text {
+        font-size: 0.6rem;
+    }
+    
+    .nav-btn {
+        max-width: 65px;
+        padding: 0.3rem;
+    }
+    
+    .quick-access {
+        padding: 10px;
+    }
+    
+    .quick-links {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .quick-link {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Quick Access Menu */
+.quick-access {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    margin: 20px;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.quick-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    min-width: 100px;
+}
+
+.quick-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    background: white;
+}
+
+.quick-icon {
+    font-size: 1.5rem;
+}
+
+.quick-text {
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.admin-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.admin-link:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b4693 100%);
+    color: white;
+}

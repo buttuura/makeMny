@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Level 3 Tasks</title>
+    <link rel="stylesheet" href="css/tasks.css">
+</head>
+<body>
+    <div class="tasks-container">
+        <!-- Header -->
+        <div class="tasks-header">
+            <div class="header-top">
+                <button class="back-btn" onclick="history.back()">←</button>
+                <h1>🚀 Level 3 Tasks</h1>
+                <div class="level-badge level3">Level 3</div>
+            </div>
+            <div class="header-info">
+                <div class="earning-rate">UGX 1,200 per task</div>
+                <div class="available-tasks">Loading tasks...</div>
+            </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="tasks-list" id="tasksList">
+            <!-- Tasks will be loaded dynamically -->
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading available tasks...</p>
+            </div>
+        </div>
+
+        <!-- No Tasks Message -->
+        <div class="no-tasks" id="noTasks" style="display: none;">
+            <div class="no-tasks-icon">📝</div>
+            <h3>No Tasks Available</h3>
+            <p>Check back later for new Level 3 tasks!</p>
+            <button class="refresh-btn" onclick="location.reload()">Refresh</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="Welcomepage.html" class="nav-item">
+                <span class="nav-icon">�7�00</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span class="nav-label">Jobs</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Earnings</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/tasks.js"></script>
+    <script>
+        // Initialize level3 tasks page
+        window.tasksController = new TasksController('level3');
+    </script>
+</body>
+</html>

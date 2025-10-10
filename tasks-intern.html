@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Intern Tasks</title>
+    <link rel="stylesheet" href="css/tasks.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <div class="tasks-container">
+        <!-- Header -->
+        <div class="tasks-header">
+            <div class="header-top">
+                <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+                <h1>🎓 Intern Tasks</h1>
+                <div class="level-badge intern">Level 1</div>
+            </div>
+            <div class="header-info">
+                <div class="earning-rate">UGX 500 per task</div>
+                <div class="available-tasks">Loading tasks...</div>
+            </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="tasks-list" id="tasksList">
+            <!-- Tasks will be loaded dynamically -->
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading available tasks...</p>
+            </div>
+        </div>
+
+        <!-- No Tasks Message -->
+        <div class="no-tasks" id="noTasks" style="display: none;">
+            <div class="no-tasks-icon">📝</div>
+            <h3>No Tasks Available</h3>
+            <p>Check back later for new intern-level tasks!</p>
+            <button class="refresh-btn" onclick="location.reload()">Refresh</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span class="nav-label">Jobs</span>
+            </a>
+            <a href="tasks-intern.html" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="deposit.html" class="nav-item">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Recharge</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/user-notifications.js"></script>
+    <script src="js/tasks.js"></script>
+    <script>
+        // Initialize intern tasks page
+        window.tasksController = new TasksController('intern');
+    </script>
+</body>
+</html>

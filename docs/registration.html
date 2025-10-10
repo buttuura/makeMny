@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetCash - Register</title>
+    <link rel="stylesheet" href="css/registration.css">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-background">
+            <div class="registration-form-wrapper">
+                <div class="registration-header">
+                    <div class="logo">
+                        <h1 class="logo-text">GetCash</h1>
+                        <p class="logo-subtitle">WE NEVER SETTLE FOR LESS</p>
+                    </div>
+                </div>
+                
+                <form class="registration-form">
+                    <h2 class="form-title">Create Account</h2>
+                    <p class="form-subtitle">Join GetCash and start earning</p>
+                    
+                    <div class="name-group">
+                        <div class="input-group half-width">
+                            <label for="firstName" class="input-label">First Name</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="firstName" name="firstName" class="input-field" placeholder="First name" required>
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <label for="lastName" class="input-label">Last Name</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="lastName" name="lastName" class="input-field" placeholder="Last name" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email" class="input-label">Email Address</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">📧</span>
+                            <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="phone" class="input-label">Phone Number</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">📱</span>
+                            <input type="tel" id="phone" name="phone" class="input-field" placeholder="Enter your phone number" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password" class="input-label">Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="password" name="password" class="input-field" placeholder="Create a password" required>
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span class="strength-text" id="strengthText">Password strength</span>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirmPassword" class="input-label">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" placeholder="Confirm your password" required>
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <span class="checkmark"></span>
+                            I want to receive promotional emails and updates
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="register-btn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                    
+                    <div class="login-link">
+                        <p>Already have an account? <a href="login.html" class="login-text">Sign in here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/registration.js"></script>
+</body>
+</html>
