@@ -6,27 +6,39 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// In-memory user store (replace with DB for production)
-const users = [];
+const connectDB = require('./db');
 
 // Registration endpoint
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { firstName, lastName, email, phone, password } = req.body;
-    if (users.find(u => u.phone === phone)) {
-        return res.status(400).json({ error: 'User already exists' });
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
+        const existing = await users.findOne({ phone });
+        if (existing) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+        await users.insertOne({ firstName, lastName, email, phone, password });
+        res.json({ message: 'Registration successful' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
     }
-    users.push({ firstName, lastName, email, phone, password });
-    res.json({ message: 'Registration successful' });
 });
 
 // Login endpoint
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
     const { phone, password } = req.body;
-    const user = users.find(u => u.phone === phone && u.password === password);
-    if (!user) {
-        return res.status(401).json({ error: 'Invalid credentials' });
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
+        const user = await users.findOne({ phone, password });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        res.json({ message: 'Login successful', user });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
     }
-    res.json({ message: 'Login successful' });
 });
 
 const PORT = process.env.PORT || 5000;
