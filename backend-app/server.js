@@ -7,6 +7,15 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const connectDB = require('./db');
+// Serve index page
+app.get('/', (req, res) => {
+    res.send('Welcome to MakeMny backend!');
+});
+
+// Serve registration page
+app.get('/registration', (req, res) => {
+    res.send('Registration endpoint is live. Use POST /api/register to register.');
+});
 
 // Registration endpoint
 app.post('/api/register', async (req, res) => {
