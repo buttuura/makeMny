@@ -6,6 +6,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const path = require('path');
+// Serve static files from the project root
+app.use(express.static(path.join(__dirname, '../')));
+
 const connectDB = require('./db');
 // Test MongoDB connection on startup
 connectDB()
