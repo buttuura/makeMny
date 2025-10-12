@@ -10,6 +10,16 @@ const path = require('path');
 // Serve static files from the project root
 app.use(express.static(path.join(__dirname, '../')));
 
+// Serve login.html at /login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../login.html'));
+});
+
+// Serve registration.html at /registration
+app.get('/registration', (req, res) => {
+    res.sendFile(path.join(__dirname, '../registration.html'));
+});
+
 const connectDB = require('./db');
 // Test MongoDB connection on startup
 connectDB()
