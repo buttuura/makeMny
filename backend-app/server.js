@@ -7,6 +7,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const connectDB = require('./db');
+// Test MongoDB connection on startup
+connectDB()
+    .then(() => console.log('Connected to MongoDB!'))
+    .catch((err) => console.error('MongoDB connection error:', err));
 // Serve index page
 app.get('/', (req, res) => {
     res.send('Welcome to MakeMny backend!');
