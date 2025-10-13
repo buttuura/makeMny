@@ -15,7 +15,7 @@
                     <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
                     <h1>👤 My Profile</h1>
                 </div>
-                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
             </div>
             <p class="header-subtitle">Manage your account and track your earnings</p>
         </div>
@@ -212,6 +212,23 @@
     </div>
 
     <script src="js/api-service.js"></script>
+    <script>
+    // Logout function for profile page
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    sessionStorage.removeItem('getcash_logged_in');
+                    sessionStorage.removeItem('getcash_user_email');
+                    sessionStorage.removeItem('getcash_selected_job_level');
+                    alert('Logged out successfully');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    });
+    </script>
     <script src="js/user-notifications.js"></script>
     <script src="js/profile.js"></script>
 </body>
