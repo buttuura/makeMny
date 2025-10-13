@@ -69,7 +69,7 @@
                     const result = await response.json();
                     if (response.ok) {
                         alert('Login successful!');
-                        // Redirect or update UI as needed
+                        window.location.href = 'Welcomepage.html';
                     } else {
                         alert(result.error || 'Login failed');
                     }
