@@ -2,11 +2,10 @@
 // Handles deposit page interactions
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Add click event to all investment amounts
-    document.querySelectorAll('.investment-amount').forEach(function(elem) {
-        elem.style.cursor = 'pointer';
-        elem.addEventListener('click', function(e) {
-            const card = elem.closest('.level-card');
+    // Add click event to all level-card sections
+    document.querySelectorAll('.level-card').forEach(function(card) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
             const level = card.getAttribute('data-level');
             const amount = card.getAttribute('data-amount');
             showPaymentPopup(level, amount);
