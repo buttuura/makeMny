@@ -52,8 +52,8 @@ function showPaymentPopup(level, amount) {
         const style = document.createElement('style');
         style.innerHTML = `
             #paymentPopup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-            .popup-overlay { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); }
-            .popup-content { position: relative; background: #fff; padding: 2em; border-radius: 10px; z-index: 2; min-width: 320px; text-align: center; }
+            .popup-overlay { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); pointer-events: none; }
+            .popup-content { position: relative; background: #fff; padding: 2em; border-radius: 10px; z-index: 2; min-width: 320px; text-align: center; pointer-events: auto; }
             .popup-content button { margin: 1em; }
             .popup-content input[type="text"] { padding:0.5em; border-radius:5px; border:1px solid #ccc; }
         `;
