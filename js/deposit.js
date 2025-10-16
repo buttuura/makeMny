@@ -79,8 +79,21 @@ function showPaymentPopup(level, amount) {
             alert('Please fill all fields and confirm your account name.');
             return;
         }
-        // Hide form, show payment instructions
-        popup.querySelector('#accountForm').style.display = 'none';
-        popup.querySelector('#paymentInstructions').style.display = 'block';
+        // Send deposit data to backend for admin approval
+        fetch('http://localhost:5000/api/deposit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ accountName: accName, amount: amount })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Hide form, show payment instructions
+            popup.querySelector('#accountForm').style.display = 'none';
+            popup.querySelector('#paymentInstructions').style.display = 'block';
+            alert(data.message);
+        })
+        .catch(() => {
+            alert('Failed to submit deposit. Please try again.');
+        });
     };
 }

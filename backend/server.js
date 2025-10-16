@@ -29,6 +29,36 @@ app.post('/api/login', (req, res) => {
     res.json({ message: 'Login successful' });
 });
 
+
+// In-memory pending deposits (for demo)
+const pendingDeposits = [];
+
+// Deposit submission endpoint
+app.post('/api/deposit', (req, res) => {
+    const { accountName, amount } = req.body;
+    if (!accountName || !amount) {
+        return res.status(400).json({ message: 'Missing account name or amount' });
+    }
+    pendingDeposits.push({ accountName, amount, status: 'pending' });
+    res.json({ message: 'Deposit submitted for approval' });
+});
+
+// Get pending deposits (for admin)
+app.get('/api/pending-deposits', (req, res) => {
+    res.json(pendingDeposits.filter(d => d.status === 'pending'));
+});
+
+// Approve deposit (for admin)
+app.post('/api/approve-deposit', (req, res) => {
+    const { accountName, amount } = req.body;
+    const deposit = pendingDeposits.find(d => d.accountName === accountName && d.amount === amount && d.status === 'pending');
+    if (!deposit) {
+        return res.status(404).json({ message: 'Deposit not found' });
+    }
+    deposit.status = 'approved';
+    res.json({ message: 'Deposit approved' });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
