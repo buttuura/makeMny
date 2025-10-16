@@ -19,7 +19,6 @@ function showPaymentPopup(level, amount) {
         popup = document.createElement('div');
         popup.id = 'paymentPopup';
         popup.innerHTML = `
-            <div class="popup-overlay"></div>
             <div class="popup-content">
                 <h2 style="color:#2d2d7a;font-size:1.5em;margin-bottom:0.5em;">Pay for <span id="popupLevel"></span></h2>
                 <p style="font-size:1.1em;margin-bottom:1em;">Amount: <span id="popupAmount"></span> UGX</p>
@@ -55,8 +54,7 @@ function showPaymentPopup(level, amount) {
         // Add styles
         const style = document.createElement('style');
         style.innerHTML = `
-            #paymentPopup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-            .popup-overlay { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); pointer-events: none; }
+            #paymentPopup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; display: flex; align-items: center; justify-content: center; background: none; }
             .popup-content { position: relative; background: #fff; padding: 2em 2.5em; border-radius: 16px; z-index: 2; min-width: 340px; max-width: 95vw; box-shadow: 0 8px 32px rgba(44,44,120,0.12); text-align: center; pointer-events: auto; }
             .popup-content button { margin: 1em 0.5em; padding: 0.6em 1.5em; border-radius: 8px; border: none; background: #2d2d7a; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
             .popup-content button:hover { background: #1a1a4d; }
@@ -98,10 +96,22 @@ function showPaymentPopup(level, amount) {
             // Hide form, show payment instructions
             popup.querySelector('#accountForm').style.display = 'none';
             popup.querySelector('#paymentInstructions').style.display = 'block';
-            // Show processing status
-            popup.querySelector('#processingStatus').style.display = 'block';
-            // Start polling for approval
-            pollApproval(accName, amount, popup);
+            // Hide processing status until user confirms payment
+            popup.querySelector('#processingStatus').style.display = 'none';
+            // Add a button to confirm payment
+            if (!popup.querySelector('#confirmPaymentBtn')) {
+                const confirmBtn = document.createElement('button');
+                confirmBtn.id = 'confirmPaymentBtn';
+                confirmBtn.textContent = 'I Have Paid';
+                confirmBtn.style.marginTop = '1em';
+                confirmBtn.onclick = function() {
+                    popup.querySelector('#paymentInstructions').style.display = 'none';
+                    popup.querySelector('#processingStatus').style.display = 'block';
+                    pollApproval(accName, amount, popup);
+                    confirmBtn.remove();
+                };
+                popup.querySelector('#paymentInstructions').appendChild(confirmBtn);
+            }
         })
         .catch(() => {
             alert('Failed to submit deposit. Please try again.');
