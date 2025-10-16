@@ -1,3 +1,12 @@
+// Get approved deposits for a user
+app.get('/api/approved-deposits', (req, res) => {
+    const { accountName } = req.query;
+    if (!accountName) {
+        return res.status(400).json({ message: 'Missing account name' });
+    }
+    const approved = pendingDeposits.filter(d => d.accountName === accountName && d.status === 'approved');
+    res.json(approved);
+});
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -35,11 +44,11 @@ const pendingDeposits = [];
 
 // Deposit submission endpoint
 app.post('/api/deposit', (req, res) => {
-    const { accountName, amount } = req.body;
-    if (!accountName || !amount) {
-        return res.status(400).json({ message: 'Missing account name or amount' });
+    const { accountName, accountNumber, amount } = req.body;
+    if (!accountName || !accountNumber || !amount) {
+        return res.status(400).json({ message: 'Missing account name, number, or amount' });
     }
-    pendingDeposits.push({ accountName, amount, status: 'pending' });
+    pendingDeposits.push({ accountName, accountNumber, amount, status: 'pending' });
     res.json({ message: 'Deposit submitted for approval' });
 });
 
