@@ -456,21 +456,6 @@ body {
     }
 }
 
-/* Confirmation Popup Styles */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    animation: fadeIn 0.3s ease;
-    padding: 20px;
-}
 
 .popup-content {
     background: white;
@@ -686,9 +671,6 @@ body {
 
 /* Responsive Popup */
 @media (max-width: 480px) {
-    .popup-overlay {
-        padding: 10px;
-    }
     
     .popup-content {
         max-height: 95vh;
