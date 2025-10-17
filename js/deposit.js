@@ -89,7 +89,7 @@ function showPaymentPopup(level, amount) {
         fetch('http://localhost:5000/api/deposit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accountName: accName, amount: amount })
+            body: JSON.stringify({ accountName: accName, accountNumber: accNum, amount: amount })
         })
         .then(res => res.json())
         .then(data => {
