@@ -18,6 +18,17 @@ function showPaymentPopup(level, amount) {
     if (!popup) {
         popup = document.createElement('div');
         popup.id = 'paymentPopup';
+        popup.style.position = 'fixed';
+        popup.style.top = '2em';
+        popup.style.left = '50%';
+        popup.style.transform = 'translateX(-50%)';
+        popup.style.width = 'auto';
+        popup.style.height = 'auto';
+        popup.style.zIndex = '9999';
+        popup.style.background = 'none';
+        popup.style.display = 'flex';
+        popup.style.alignItems = 'flex-start';
+        popup.style.justifyContent = 'center';
         popup.innerHTML = `
             <div class="popup-content">
                 <h2 style="color:#2d2d7a;font-size:1.5em;margin-bottom:0.5em;">Pay for <span id="popupLevel"></span></h2>
@@ -46,7 +57,7 @@ function showPaymentPopup(level, amount) {
                 </div>
                 <div id="processingStatus" style="display:none;margin-top:2em;text-align:center;">
                     <div class="loader"></div>
-                    <div style="margin-top:1em;font-size:1.1em;color:#2d2d7a;">Processing... Waiting for admin approval.</div>
+                    <div style="margin-top:1em;font-size:1.1em;color:#2d2d7a;">Processing</div>
                 </div>
             </div>
         `;
@@ -54,7 +65,6 @@ function showPaymentPopup(level, amount) {
         // Add styles
         const style = document.createElement('style');
         style.innerHTML = `
-            #paymentPopup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; display: flex; align-items: center; justify-content: center; background: none; }
             .popup-content { position: relative; background: #fff; padding: 2em 2.5em; border-radius: 16px; z-index: 2; min-width: 340px; max-width: 95vw; box-shadow: 0 8px 32px rgba(44,44,120,0.12); text-align: center; pointer-events: auto; }
             .popup-content button { margin: 1em 0.5em; padding: 0.6em 1.5em; border-radius: 8px; border: none; background: #2d2d7a; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
             .popup-content button:hover { background: #1a1a4d; }
@@ -66,6 +76,8 @@ function showPaymentPopup(level, amount) {
         document.head.appendChild(style);
     }
     popup.style.display = 'flex';
+    popup.style.pointerEvents = 'auto';
+    document.body.style.overflow = '';
     popup.querySelector('#popupLevel').textContent = level.charAt(0).toUpperCase() + level.slice(1) + ' Worker';
     popup.querySelector('#popupAmount').textContent = amount;
     // Reset form and instructions

@@ -1,3 +1,40 @@
+// Deposit stats endpoint
+app.get('/api/deposit-stats', async (req, res) => {
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        const pending = await deposits.countDocuments({ status: 'pending' });
+        const approved = await deposits.countDocuments({ status: 'approved' });
+        const rejected = await deposits.countDocuments({ status: 'rejected' });
+        const totalRevenueAgg = await deposits.aggregate([
+            { $match: { status: 'approved' } },
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+        ]).toArray();
+        const totalRevenue = totalRevenueAgg[0]?.total || 0;
+        res.json({ pending, approved, rejected, totalRevenue });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+// Approve deposit endpoint
+app.post('/api/approve-deposit', async (req, res) => {
+    const { accountName, amount } = req.body;
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        // Update deposit status to approved
+        const result = await deposits.updateOne(
+            { accountName, amount, status: 'pending' },
+            { $set: { status: 'approved', approvedAt: new Date() } }
+        );
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ error: 'Deposit not found or already approved.' });
+        }
+        res.json({ message: 'Deposit approved.' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');

@@ -2,12 +2,31 @@
 // Fetch and display pending deposits, allow admin to approve
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetchPendingDeposits();
+
+    fetchStatsAndDeposits();
 });
+
+function fetchStatsAndDeposits() {
+    fetch('https://makemny-3.onrender.com/api/deposit-stats')
+        .then(res => res.json())
+        .then(stats => {
+            document.getElementById('pendingCount').textContent = stats.pending;
+            document.getElementById('approvedCount').textContent = stats.approved;
+            document.getElementById('rejectedCount').textContent = stats.rejected;
+            document.getElementById('totalRevenue').textContent = stats.totalRevenue;
+        })
+        .catch(() => {
+            document.getElementById('pendingCount').textContent = '0';
+            document.getElementById('approvedCount').textContent = '0';
+            document.getElementById('rejectedCount').textContent = '0';
+            document.getElementById('totalRevenue').textContent = '0';
+        });
+    fetchPendingDeposits();
+}
 
 function fetchPendingDeposits() {
     document.getElementById('loadingSpinner').style.display = 'block';
-    fetch('http://localhost:5000/api/pending-deposits')
+    fetch('https://makemny-3.onrender.com/api/pending-deposits')
         .then(res => res.json())
         .then(data => {
             document.getElementById('loadingSpinner').style.display = 'none';
@@ -32,6 +51,7 @@ function renderApprovals(deposits) {
         item.className = 'approval-item';
         item.innerHTML = `
             <div><strong>Account Name:</strong> ${dep.accountName}</div>
+            <div><strong>Account Number:</strong> ${dep.accountNumber}</div>
             <div><strong>Amount:</strong> UGX ${dep.amount}</div>
             <button onclick="approveDeposit('${dep.accountName}', ${dep.amount})">Approve</button>
         `;
@@ -40,7 +60,7 @@ function renderApprovals(deposits) {
 }
 
 function approveDeposit(accountName, amount) {
-    fetch('http://localhost:5000/api/approve-deposit', {
+    fetch('https://makemny-3.onrender.com/api/approve-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountName, amount })
