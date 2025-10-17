@@ -1,3 +1,28 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+const path = require('path');
+// Serve static files from the project root
+app.use(express.static(path.join(__dirname, '../')));
+
+// Serve login.html at /login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../login.html'));
+});
+
+// Serve registration.html at /registration
+app.get('/registration', (req, res) => {
+    res.sendFile(path.join(__dirname, '../registration.html'));
+});
+
+const connectDB = require('./db');
+const connectDB = require('./db');
+
 // Deposit stats endpoint
 app.get('/api/deposit-stats', async (req, res) => {
     try {
@@ -35,29 +60,6 @@ app.post('/api/approve-deposit', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-const path = require('path');
-// Serve static files from the project root
-app.use(express.static(path.join(__dirname, '../')));
-
-// Serve login.html at /login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../login.html'));
-});
-
-// Serve registration.html at /registration
-app.get('/registration', (req, res) => {
-    res.sendFile(path.join(__dirname, '../registration.html'));
-});
-
-const connectDB = require('./db');
 // Test MongoDB connection on startup
 connectDB()
     .then(() => console.log('Connected to MongoDB!'))
