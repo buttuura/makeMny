@@ -68,6 +68,34 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+
+// Deposit endpoint
+app.post('/api/deposit', async (req, res) => {
+    const { accountName, accountNumber, amount } = req.body;
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        // Save deposit as pending approval
+        await deposits.insertOne({ accountName, accountNumber, amount, status: 'pending', createdAt: new Date() });
+        res.json({ message: 'Deposit request submitted. Await admin approval.' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// Pending deposits endpoint
+app.get('/api/pending-deposits', async (req, res) => {
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        // Return all deposits still pending approval
+        const pending = await deposits.find({ status: 'pending' }).toArray();
+        res.json(pending);
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
