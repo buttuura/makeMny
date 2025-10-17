@@ -21,7 +21,6 @@ app.get('/registration', (req, res) => {
 });
 
 const connectDB = require('./db');
-const connectDB = require('./db');
 
 // Deposit stats endpoint
 app.get('/api/deposit-stats', async (req, res) => {
