@@ -139,8 +139,10 @@ app.post('/api/register', async (req, res) => {
         if (existing) {
             return res.status(400).json({ error: 'User already exists' });
         }
-        await users.insertOne({ firstName, lastName, email, phone, password });
-        res.json({ message: 'Registration successful' });
+        const user = { firstName, lastName, email, phone, password };
+        await users.insertOne(user);
+        // Return user data for immediate use on frontend
+        res.json({ message: 'Registration successful', user });
     } catch (err) {
         res.status(500).json({ error: 'Database error' });
     }
