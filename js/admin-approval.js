@@ -92,6 +92,10 @@ function approveDeposit(accountName, amount) {
             }
             return dep;
         });
+        // Switch filter to 'approved' so user sees the item move
+        currentStatus = 'approved';
+        const statusFilter = document.getElementById('statusFilter');
+        if (statusFilter) statusFilter.value = 'approved';
         renderApprovals();
         fetchStatsAndDeposits();
         alert('Deposit approved!');
