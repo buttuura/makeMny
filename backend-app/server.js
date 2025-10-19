@@ -1,3 +1,28 @@
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const path = require('path');
+// Serve static files from the project root
+app.use(express.static(path.join(__dirname, '../')));
+
+// Serve login.html at /login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../login.html'));
+});
+
+// Serve registration.html at /registration
+app.get('/registration', (req, res) => {
+    res.sendFile(path.join(__dirname, '../registration.html'));
+});
+
+const connectDB = require('./db');
+
 // Get all deposits by status
 // Usage: /api/deposits?status=approved|rejected|pending
 app.get('/api/deposits', async (req, res) => {
@@ -15,6 +40,7 @@ app.get('/api/deposits', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
+
 // Reject deposit endpoint
 app.post('/api/reject-deposit', async (req, res) => {
     const { accountName, amount } = req.body;
@@ -34,29 +60,8 @@ app.post('/api/reject-deposit', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
 
-const path = require('path');
-// Serve static files from the project root
-app.use(express.static(path.join(__dirname, '../')));
-
-// Serve login.html at /login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../login.html'));
-});
-
-// Serve registration.html at /registration
-app.get('/registration', (req, res) => {
-    res.sendFile(path.join(__dirname, '../registration.html'));
-});
-
-const connectDB = require('./db');
 
 // Deposit stats endpoint
 app.get('/api/deposit-stats', async (req, res) => {
