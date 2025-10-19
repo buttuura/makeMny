@@ -1,3 +1,39 @@
+// Get all deposits by status
+// Usage: /api/deposits?status=approved|rejected|pending
+app.get('/api/deposits', async (req, res) => {
+    const { status } = req.query;
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        let query = {};
+        if (status && status !== 'all') {
+            query.status = status;
+        }
+        const results = await deposits.find(query).sort({ createdAt: -1 }).toArray();
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+// Reject deposit endpoint
+app.post('/api/reject-deposit', async (req, res) => {
+    const { accountName, amount } = req.body;
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        // Update deposit status to rejected
+        const result = await deposits.updateOne(
+            { accountName, amount, status: 'pending' },
+            { $set: { status: 'rejected', rejectedAt: new Date() } }
+        );
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ error: 'Deposit not found or already rejected.' });
+        }
+        res.json({ message: 'Deposit rejected.' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
