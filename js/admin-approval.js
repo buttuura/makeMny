@@ -85,6 +85,14 @@ function approveDeposit(accountName, amount) {
     })
     .then(res => res.json())
     .then(() => {
+        // Update local allDeposits array
+        allDeposits = allDeposits.map(dep => {
+            if (dep.accountName === accountName && dep.amount === amount && dep.status === 'pending') {
+                return { ...dep, status: 'approved', approvedAt: new Date() };
+            }
+            return dep;
+        });
+        renderApprovals();
         fetchStatsAndDeposits();
         alert('Deposit approved!');
     });
@@ -98,6 +106,14 @@ function rejectDeposit(accountName, amount) {
     })
     .then(res => res.json())
     .then(() => {
+        // Update local allDeposits array
+        allDeposits = allDeposits.map(dep => {
+            if (dep.accountName === accountName && dep.amount === amount && dep.status === 'pending') {
+                return { ...dep, status: 'rejected', rejectedAt: new Date() };
+            }
+            return dep;
+        });
+        renderApprovals();
         fetchStatsAndDeposits();
         alert('Deposit rejected!');
     });
