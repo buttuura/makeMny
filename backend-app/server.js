@@ -1,3 +1,18 @@
+// Get all approved deposits for a user
+app.get('/api/approved-deposits', async (req, res) => {
+    const { accountName } = req.query;
+    if (!accountName) {
+        return res.status(400).json({ error: 'Missing accountName parameter' });
+    }
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        const results = await deposits.find({ accountName, status: 'approved' }).toArray();
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
 
 const express = require('express');
 const bodyParser = require('body-parser');
