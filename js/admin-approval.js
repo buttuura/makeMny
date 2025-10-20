@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchStatsAndDeposits() {
-    fetch('https://makemny-3.onrender.com/api/deposit-stats')
+    fetch('/api/deposit-stats')
         .then(res => res.json())
         .then(stats => {
             document.getElementById('pendingCount').textContent = stats.pending;
@@ -35,7 +35,7 @@ function fetchStatsAndDeposits() {
 
 function fetchAllDeposits() {
     document.getElementById('loadingSpinner').style.display = 'block';
-    fetch('https://makemny-3.onrender.com/api/deposits?status=all')
+    fetch('/api/deposits?status=all')
         .then(res => res.json())
         .then(data => {
             document.getElementById('loadingSpinner').style.display = 'none';
@@ -78,7 +78,7 @@ function renderApprovals() {
 }
 
 function approveDeposit(accountName, amount) {
-    fetch('https://makemny-3.onrender.com/api/approve-deposit', {
+    fetch('/api/approve-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountName, amount })
@@ -103,7 +103,7 @@ function approveDeposit(accountName, amount) {
 }
 
 function rejectDeposit(accountName, amount) {
-    fetch('https://makemny-3.onrender.com/api/reject-deposit', {
+    fetch('/api/reject-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountName, amount })

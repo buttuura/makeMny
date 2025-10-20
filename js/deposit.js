@@ -98,7 +98,7 @@ function showPaymentPopup(level, amount) {
             return;
         }
         // Send deposit data to backend for admin approval
-    fetch('https://makemny-3.onrender.com/api/deposit', {
+    fetch('/api/deposit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ accountName: accName, accountNumber: accNum, amount: amount })
@@ -133,7 +133,7 @@ function showPaymentPopup(level, amount) {
 
 function pollApproval(accountName, amount, popup) {
     let interval = setInterval(() => {
-    fetch('https://makemny-3.onrender.com/api/pending-deposits')
+    fetch('/api/pending-deposits')
             .then(res => res.json())
             .then(data => {
                 // If deposit is no longer pending, show approved message

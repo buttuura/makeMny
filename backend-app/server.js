@@ -1,18 +1,4 @@
-// Get all approved deposits for a user
-app.get('/api/approved-deposits', async (req, res) => {
-    const { accountName } = req.query;
-    if (!accountName) {
-        return res.status(400).json({ error: 'Missing accountName parameter' });
-    }
-    try {
-        const db = await connectDB();
-        const deposits = db.collection('deposits');
-        const results = await deposits.find({ accountName, status: 'approved' }).toArray();
-        res.json(results);
-    } catch (err) {
-        res.status(500).json({ error: 'Database error' });
-    }
-});
+
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -37,6 +23,42 @@ app.get('/registration', (req, res) => {
 });
 
 const connectDB = require('./db');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
+
+app.use(cookieParser());
+
+// Auth middleware
+function requireAuth(req, res, next) {
+    const token = req.cookies?.sid;
+    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const payload = jwt.verify(token, JWT_SECRET);
+        req.userId = payload.sub;
+        next();
+    } catch (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+}
+
+// Get all approved deposits for a user
+app.get('/api/approved-deposits', async (req, res) => {
+    const { accountName } = req.query;
+    if (!accountName) {
+        return res.status(400).json({ error: 'Missing accountName parameter' });
+    }
+    try {
+        const db = await connectDB();
+        const deposits = db.collection('deposits');
+        const results = await deposits.find({ accountName, status: 'approved' }).toArray();
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: 'Database error' });
+    }
+});
 
 // Get all deposits by status
 // Usage: /api/deposits?status=approved|rejected|pending
@@ -132,6 +154,7 @@ app.get('/registration', (req, res) => {
 // Registration endpoint
 app.post('/api/register', async (req, res) => {
     const { firstName, lastName, email, phone, password } = req.body;
+    if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
     try {
         const db = await connectDB();
         const users = db.collection('users');
@@ -139,11 +162,16 @@ app.post('/api/register', async (req, res) => {
         if (existing) {
             return res.status(400).json({ error: 'User already exists' });
         }
-        const user = { firstName, lastName, email, phone, password };
-        await users.insertOne(user);
-        // Return user data for immediate use on frontend
-        res.json({ message: 'Registration successful', user });
+        const passwordHash = await bcrypt.hash(password, 12);
+        const now = new Date();
+        const user = { firstName, lastName, email, phone, passwordHash, createdAt: now };
+        const r = await users.insertOne(user);
+        const userId = r.insertedId.toString();
+        const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
+        res.cookie('sid', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*3600*1000 });
+        res.status(201).json({ message: 'Registration successful', user: { id: userId, firstName, lastName, email, phone } });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });
@@ -151,15 +179,34 @@ app.post('/api/register', async (req, res) => {
 // Login endpoint
 app.post('/api/login', async (req, res) => {
     const { phone, password } = req.body;
+    if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
     try {
         const db = await connectDB();
         const users = db.collection('users');
-        const user = await users.findOne({ phone, password });
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-        res.json({ message: 'Login successful', user });
+        const user = await users.findOne({ phone });
+        if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+        const ok = await bcrypt.compare(password, user.passwordHash || '');
+        if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+        const userId = user._id.toString();
+        const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
+        res.cookie('sid', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*3600*1000 });
+        res.json({ message: 'Login successful', user: { id: userId, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone } });
     } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// Get current user
+app.get('/api/me', requireAuth, async (req, res) => {
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
+        const user = await users.findOne({ _id: new (require('mongodb').ObjectId)(req.userId) });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.json({ id: user._id.toString(), firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone });
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });
