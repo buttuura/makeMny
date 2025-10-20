@@ -78,15 +78,16 @@ app.get('/api/deposits', async (req, res) => {
     }
 });
 
-// Reject deposit endpoint
-app.post('/api/reject-deposit', async (req, res) => {
-    const { accountName, amount } = req.body;
+// Reject deposit endpoint (by depositId)
+app.post('/api/reject-deposit', requireAuth, requireAdmin, async (req, res) => {
+    const { depositId } = req.body;
+    if (!depositId) return res.status(400).json({ error: 'Missing depositId' });
     try {
         const db = await connectDB();
         const deposits = db.collection('deposits');
-        // Update deposit status to rejected
+        const { ObjectId } = require('mongodb');
         const result = await deposits.updateOne(
-            { accountName, amount, status: 'pending' },
+            { _id: new ObjectId(depositId), status: 'pending' },
             { $set: { status: 'rejected', rejectedAt: new Date() } }
         );
         if (result.modifiedCount === 0) {
@@ -94,9 +95,33 @@ app.post('/api/reject-deposit', async (req, res) => {
         }
         res.json({ message: 'Deposit rejected.' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });
+
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+    res.clearCookie('sid', { path: '/' });
+    res.json({ message: 'Logged out' });
+});
+
+// Admin middleware
+async function requireAdmin(req, res, next) {
+    try {
+        const db = await connectDB();
+        const users = db.collection('users');
+        const user = await users.findOne({ _id: new (require('mongodb').ObjectId)(req.userId) });
+        if (!user || !user.roles || !user.roles.includes('admin')) {
+            return res.status(403).json({ error: 'Admin required' });
+        }
+        req.user = user;
+        next();
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
 
 
 
@@ -118,15 +143,16 @@ app.get('/api/deposit-stats', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
-// Approve deposit endpoint
-app.post('/api/approve-deposit', async (req, res) => {
-    const { accountName, amount } = req.body;
+// Approve deposit endpoint (by depositId)
+app.post('/api/approve-deposit', requireAuth, requireAdmin, async (req, res) => {
+    const { depositId } = req.body;
+    if (!depositId) return res.status(400).json({ error: 'Missing depositId' });
     try {
         const db = await connectDB();
         const deposits = db.collection('deposits');
-        // Update deposit status to approved
+        const { ObjectId } = require('mongodb');
         const result = await deposits.updateOne(
-            { accountName, amount, status: 'pending' },
+            { _id: new ObjectId(depositId), status: 'pending' },
             { $set: { status: 'approved', approvedAt: new Date() } }
         );
         if (result.modifiedCount === 0) {
@@ -134,6 +160,7 @@ app.post('/api/approve-deposit', async (req, res) => {
         }
         res.json({ message: 'Deposit approved.' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database error' });
     }
 });
@@ -141,6 +168,28 @@ app.post('/api/approve-deposit', async (req, res) => {
 connectDB()
     .then(() => console.log('Connected to MongoDB!'))
     .catch((err) => console.error('MongoDB connection error:', err));
+
+// Admin bootstrap: if ADMIN_PHONE and ADMIN_PASS are set, ensure an admin user exists
+if (process.env.ADMIN_PHONE && process.env.ADMIN_PASS) {
+    (async () => {
+        try {
+            const db = await connectDB();
+            const users = db.collection('users');
+            let admin = await users.findOne({ phone: process.env.ADMIN_PHONE });
+            if (!admin) {
+                const passwordHash = await bcrypt.hash(process.env.ADMIN_PASS, 12);
+                const now = new Date();
+                const r = await users.insertOne({ phone: process.env.ADMIN_PHONE, firstName: 'Admin', lastName: '', email: '', passwordHash, roles: ['admin'], createdAt: now });
+                console.log('Admin user created:', r.insertedId.toString());
+            } else if (!admin.roles || !admin.roles.includes('admin')) {
+                await users.updateOne({ _id: admin._id }, { $set: { roles: ['admin'] } });
+                console.log('Admin role set for existing user');
+            }
+        } catch (err) {
+            console.error('Admin bootstrap failed', err);
+        }
+    })();
+}
 // Serve index page
 app.get('/', (req, res) => {
     res.send('Welcome to MakeMny backend!');
@@ -185,7 +234,24 @@ app.post('/api/login', async (req, res) => {
         const users = db.collection('users');
         const user = await users.findOne({ phone });
         if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-        const ok = await bcrypt.compare(password, user.passwordHash || '');
+        let ok = false;
+        // Prefer bcrypt hash comparison
+        if (user.passwordHash) {
+            ok = await bcrypt.compare(password, user.passwordHash);
+        } else if (user.password) {
+            // Legacy plaintext password field — compare and migrate
+            if (password === user.password) {
+                ok = true;
+                // Migrate to hashed password
+                const newHash = await bcrypt.hash(password, 12);
+                try {
+                    await users.updateOne({ _id: user._id }, { $set: { passwordHash: newHash }, $unset: { password: '' } });
+                    console.log('Migrated legacy plaintext password for user', user._id.toString());
+                } catch (e) {
+                    console.error('Failed to migrate password for user', user._id.toString(), e);
+                }
+            }
+        }
         if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
         const userId = user._id.toString();
         const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
@@ -219,8 +285,8 @@ app.post('/api/deposit', async (req, res) => {
         const db = await connectDB();
         const deposits = db.collection('deposits');
         // Save deposit as pending approval
-        await deposits.insertOne({ accountName, accountNumber, amount, status: 'pending', createdAt: new Date() });
-        res.json({ message: 'Deposit request submitted. Await admin approval.' });
+        const r = await deposits.insertOne({ accountName, accountNumber, amount, status: 'pending', createdAt: new Date() });
+        res.status(201).json({ message: 'Deposit request submitted. Await admin approval.', depositId: r.insertedId.toString() });
     } catch (err) {
         res.status(500).json({ error: 'Database error' });
     }

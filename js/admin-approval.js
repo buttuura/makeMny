@@ -69,25 +69,25 @@ function renderApprovals() {
             <div><strong>Amount:</strong> UGX ${dep.amount}</div>
             <div><strong>Status:</strong> ${dep.status.charAt(0).toUpperCase() + dep.status.slice(1)}</div>
             ${dep.status === 'pending' ? `
-                <button onclick="approveDeposit('${dep.accountName}', ${dep.amount})">Approve</button>
-                <button onclick="rejectDeposit('${dep.accountName}', ${dep.amount})" style="margin-left:1em;background:#e74c3c;color:#fff;">Reject</button>
+                <button onclick="approveDeposit('${dep._id}')">Approve</button>
+                <button onclick="rejectDeposit('${dep._id}')" style="margin-left:1em;background:#e74c3c;color:#fff;">Reject</button>
             ` : ''}
         `;
         list.appendChild(item);
     });
 }
 
-function approveDeposit(accountName, amount) {
+function approveDeposit(depositId) {
     fetch('/api/approve-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountName, amount })
+        body: JSON.stringify({ depositId })
     })
     .then(res => res.json())
     .then(() => {
         // Update local allDeposits array
         allDeposits = allDeposits.map(dep => {
-            if (dep.accountName === accountName && dep.amount === amount && dep.status === 'pending') {
+            if (dep._id === depositId && dep.status === 'pending') {
                 return { ...dep, status: 'approved', approvedAt: new Date() };
             }
             return dep;
@@ -102,17 +102,17 @@ function approveDeposit(accountName, amount) {
     });
 }
 
-function rejectDeposit(accountName, amount) {
+function rejectDeposit(depositId) {
     fetch('/api/reject-deposit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountName, amount })
+        body: JSON.stringify({ depositId })
     })
     .then(res => res.json())
     .then(() => {
         // Update local allDeposits array
         allDeposits = allDeposits.map(dep => {
-            if (dep.accountName === accountName && dep.amount === amount && dep.status === 'pending') {
+            if (dep._id === depositId && dep.status === 'pending') {
                 return { ...dep, status: 'rejected', rejectedAt: new Date() };
             }
             return dep;
