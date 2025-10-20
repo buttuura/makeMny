@@ -1,3 +1,63 @@
+// Filter approvals by status, level, date, and search
+function filterApprovals() {
+    const status = document.getElementById('statusFilter')?.value || 'all';
+    const level = document.getElementById('levelFilter')?.value || 'all';
+    const date = document.getElementById('dateFilter')?.value || 'all';
+    const search = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+
+    let filtered = allDeposits.filter(dep => {
+        // Status filter
+        if (status !== 'all' && dep.status !== status) return false;
+        // Level filter (assume dep.level exists, otherwise skip)
+        if (level !== 'all' && dep.level !== level) return false;
+        // Date filter
+        if (date !== 'all') {
+            const createdAt = new Date(dep.createdAt);
+            const now = new Date();
+            if (date === 'today') {
+                if (createdAt.toDateString() !== now.toDateString()) return false;
+            } else if (date === 'week') {
+                const weekAgo = new Date(now);
+                weekAgo.setDate(now.getDate() - 7);
+                if (createdAt < weekAgo) return false;
+            } else if (date === 'month') {
+                const monthAgo = new Date(now);
+                monthAgo.setMonth(now.getMonth() - 1);
+                if (createdAt < monthAgo) return false;
+            }
+        }
+        // Search filter (by accountName or accountNumber)
+        if (search) {
+            const accName = (dep.accountName || '').toLowerCase();
+            const accNum = (dep.accountNumber || '').toLowerCase();
+            if (!accName.includes(search) && !accNum.includes(search)) return false;
+        }
+        return true;
+    });
+
+    const list = document.getElementById('approvalsList');
+    list.innerHTML = '';
+    if (!filtered.length) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+    }
+    document.getElementById('emptyState').style.display = 'none';
+    filtered.forEach(dep => {
+        const item = document.createElement('div');
+        item.className = 'approval-item';
+        item.innerHTML = `
+            <div><strong>Account Name:</strong> ${dep.accountName}</div>
+            <div><strong>Account Number:</strong> ${dep.accountNumber}</div>
+            <div><strong>Amount:</strong> UGX ${dep.amount}</div>
+            <div><strong>Status:</strong> ${dep.status.charAt(0).toUpperCase() + dep.status.slice(1)}</div>
+            ${dep.status === 'pending' ? `
+                <button onclick="approveDeposit('${dep.accountName}', ${dep.amount})">Approve</button>
+                <button onclick="rejectDeposit('${dep.accountName}', ${dep.amount})" style="margin-left:1em;background:#e74c3c;color:#fff;">Reject</button>
+            ` : ''}
+        `;
+        list.appendChild(item);
+    });
+}
 // admin-approval.js
 // Fetch and display pending deposits, allow admin to approve
 
