@@ -5,7 +5,7 @@ function filterApprovals() {
     const date = document.getElementById('dateFilter')?.value || 'all';
     const search = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
 // Simple admin approval JS
-const API_BASE = 'https://makemny-3.onrender.com'; // Change to your backend URL if needed
+const API_BASE = 'https://makemny-5.onrender.com';
 
 function showMessage(msg, color = 'red') {
     const el = document.getElementById('message');
