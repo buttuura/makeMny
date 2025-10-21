@@ -1,28 +1,28 @@
-// Admin password setup (one-time)
+// Admin setup (one-time, phone number + password)
 app.post('/api/admin/setup', async (req, res) => {
-  const { password } = req.body;
-  if (!password) return res.status(400).json({ error: 'Missing password' });
+  const { phone, password } = req.body;
+  if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
   try {
     const admins = db.collection('admins');
     const existing = await admins.findOne({});
-    if (existing) return res.status(400).json({ error: 'Admin password already set' });
-    await admins.insertOne({ password });
-    res.json({ message: 'Admin password set' });
+    if (existing) return res.status(400).json({ error: 'Admin already set' });
+    await admins.insertOne({ phone, password });
+    res.json({ message: 'Admin setup complete' });
   } catch (err) {
     res.status(500).json({ error: 'Database error' });
   }
 });
 
-// Admin login
+// Admin login (phone number + password)
 app.post('/api/admin/login', async (req, res) => {
-  const { password } = req.body;
-  if (!password) return res.status(400).json({ error: 'Missing password' });
+  const { phone, password } = req.body;
+  if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
   try {
     const admins = db.collection('admins');
-    const admin = await admins.findOne({ password });
-    if (!admin) return res.status(401).json({ error: 'Invalid password' });
+    const admin = await admins.findOne({ phone, password });
+    if (!admin) return res.status(401).json({ error: 'Invalid phone or password' });
     // Simple session: return a token (not secure, but enough for demo)
-    res.json({ token: 'admin-token' });
+    res.json({ token: 'admin-token', phone });
   } catch (err) {
     res.status(500).json({ error: 'Database error' });
   }
@@ -37,7 +37,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017';
+const MONGO_URL = process.env.MONGO_URL || 'mongodb+srv://delmedah_db_user:p10CTu9EKKSOhMVC@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const DB_NAME = process.env.DB_NAME || 'makemny';
 let db;
 
