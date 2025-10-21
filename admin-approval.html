@@ -114,37 +114,6 @@
         </section>
 
         <!-- Approvals List -->
-        <section class="approvals-section">
-            <div class="section-header">
-                <h2>Deposit Approvals</h2>
-                <div class="bulk-actions">
-                    <button class="bulk-btn approve-all" onclick="bulkApprove()" disabled>
-                        ✅ Approve Selected
-                    </button>
-                    <button class="bulk-btn reject-all" onclick="bulkReject()" disabled>
-                        ❌ Reject Selected
-                    </button>
-                </div>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loadingSpinner" class="loading-container">
-                <div class="spinner"></div>
-                <p>Loading approvals...</p>
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="empty-state" style="display: none;">
-                <div class="empty-icon">📭</div>
-                <h3>No Approvals Found</h3>
-                <p>No deposit requests match your current filters.</p>
-            </div>
-
-            <!-- Approvals List -->
-            <div id="approvalsList" class="approvals-list">
-                <!-- Approval items will be populated by JavaScript -->
-            </div>
-        </section>
 
         <!-- Approval Modal -->
         <div id="approvalModal" class="modal">
