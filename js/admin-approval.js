@@ -27,18 +27,18 @@ function renderApprovals(deposits) {
         div.className = 'approval-item';
         div.innerHTML = `
             <strong>${dep.accountName}</strong> | UGX ${dep.amount} | ${dep.accountNumber}
-            <button onclick="approveDeposit('${dep.accountName}', ${dep.amount})">Approve</button>
-            <button onclick="rejectDeposit('${dep.accountName}', ${dep.amount})">Reject</button>
+            <button onclick="approveDeposit('${dep._id}')">Approve</button>
+            <button onclick="rejectDeposit('${dep._id}')">Reject</button>
         `;
         container.appendChild(div);
     });
 }
 
-function approveDeposit(accountName, amount) {
+function approveDeposit(depositId) {
     fetch(`${API_BASE}/api/approve-deposit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountName, amount })
+        body: JSON.stringify({ depositId })
     })
     .then(res => res.json())
     .then(data => {
@@ -48,11 +48,11 @@ function approveDeposit(accountName, amount) {
     .catch(() => showMessage('Failed to approve deposit'));
 }
 
-function rejectDeposit(accountName, amount) {
+function rejectDeposit(depositId) {
     fetch(`${API_BASE}/api/reject-deposit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountName, amount })
+        body: JSON.stringify({ depositId })
     })
     .then(res => res.json())
     .then(data => {
