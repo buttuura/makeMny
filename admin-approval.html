@@ -30,100 +30,16 @@
                         🏠 Home
                     </a>
                 </div>
+                <h1>Admin Deposit Approvals</h1>
+                <div id="message" style="color: green;"></div>
+                <div id="approvals"></div>
+                <script src="js/admin-approval.js"></script>
+                <script src="js/admin-auth.js"></script>
+                <script>
+document.addEventListener('DOMContentLoaded', function() {
+  requireAdmin();
+});
+</script>
             </div>
-        </header>
-        <!-- Stats Overview -->
-        <section class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-card pending">
-                    <div class="stat-icon">⏳</div>
-                    <div class="stat-info">
-                        <h3 id="pendingCount">0</h3>
-                        <p>Pending Approvals</p>
-                    </div>
-                </div>
-                <div class="stat-card approved">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <h3 id="approvedCount">0</h3>
-                        <p>Approved Today</p>
-                    </div>
-                </div>
-                <div class="stat-card rejected">
-                    <div class="stat-icon">❌</div>
-                    <div class="stat-info">
-                        <h3 id="rejectedCount">0</h3>
-                        <p>Rejected Today</p>
-                    </div>
-                </div>
-                <div class="stat-card revenue">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-info">
-                        <h3 id="totalRevenue">0</h3>
-                        <p>Total Revenue (UGX)</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Filter Controls -->
-        <section class="filter-section">
-            <div class="filter-controls">
-                <select id="statusFilter" onchange="filterApprovals()">
-                    <option value="all">All Status</option>
-                    <option value="pending" selected>Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                
-                <select id="levelFilter" onchange="filterApprovals()">
-                    <option value="all">All Levels</option>
-                    <option value="intern">Intern (UGX 10,000)</option>
-                    <option value="level1">Level 1 (UGX 15,000)</option>
-                    <option value="level2">Level 2 (UGX 25,000)</option>
-                    <option value="level3">Level 3 (UGX 40,000)</option>
-                </select>
-
-                <select id="dateFilter" onchange="filterApprovals()">
-                    <option value="all">All Time</option>
-                    <option value="today">Today</option>
-                    <option value="week">This Week</option>
-                    <option value="month">This Month</option>
-                </select>
-
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search by user ID or phone..." onkeyup="filterApprovals()">
-                    <span class="search-icon">🔍</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Approvals List -->
-
-        <!-- Approval Modal -->
-        <div id="approvalModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">Review Deposit</h3>
-                    <button class="close-btn" onclick="closeModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="modalContent">
-                        <!-- Content will be populated by JavaScript -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button class="btn btn-danger" onclick="rejectDeposit()">Reject</button>
-                    <button class="btn btn-success" onclick="approveDeposit()">Approve</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Success/Error Messages -->
-        <div id="messageContainer"></div>
-    </div>
-
-    <script src="js/admin-approval.js"></script>
 </body>
 </html>

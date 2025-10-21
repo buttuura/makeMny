@@ -1,3 +1,32 @@
+// Admin password setup (one-time)
+app.post('/api/admin/setup', async (req, res) => {
+  const { password } = req.body;
+  if (!password) return res.status(400).json({ error: 'Missing password' });
+  try {
+    const admins = db.collection('admins');
+    const existing = await admins.findOne({});
+    if (existing) return res.status(400).json({ error: 'Admin password already set' });
+    await admins.insertOne({ password });
+    res.json({ message: 'Admin password set' });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Admin login
+app.post('/api/admin/login', async (req, res) => {
+  const { password } = req.body;
+  if (!password) return res.status(400).json({ error: 'Missing password' });
+  try {
+    const admins = db.collection('admins');
+    const admin = await admins.findOne({ password });
+    if (!admin) return res.status(401).json({ error: 'Invalid password' });
+    // Simple session: return a token (not secure, but enough for demo)
+    res.json({ token: 'admin-token' });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error' });
+  }
+});
 // Simple Express backend for admin approval (MongoDB)
 const express = require('express');
 const bodyParser = require('body-parser');
