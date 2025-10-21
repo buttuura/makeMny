@@ -133,15 +133,27 @@ function showPaymentPopup(level, amount) {
 
 function pollApproval(accountName, amount, popup) {
     let interval = setInterval(() => {
-    fetch('/api/pending-deposits')
+        fetch('/api/pending-deposits')
             .then(res => res.json())
             .then(data => {
-                // If deposit is no longer pending, show approved message
+                // If deposit is no longer pending, show approved message and redirect
                 const found = data.find(d => d.accountName === accountName && d.amount == amount);
                 if (!found) {
                     clearInterval(interval);
-                    popup.querySelector('#processingStatus').innerHTML = '<div style="color:green;font-size:1.2em;margin-top:1em;">✅ Deposit Approved by Admin!</div>';
-                    setTimeout(() => { popup.style.display = 'none'; }, 2500);
+                    popup.querySelector('#processingStatus').innerHTML = '<div style="color:green;font-size:1.2em;margin-top:1em;">✅ Deposit Approved by Admin! Redirecting to your task...</div>';
+                    // Redirect to correct task page after short delay
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                        // Determine level from amount (simple mapping)
+                        let levelPage = '';
+                        if (amount == '0') levelPage = 'tasks-intern.html';
+                        else if (amount == '75000') levelPage = 'tasks-level1.html';
+                        else if (amount == '250000') levelPage = 'tasks-level2.html';
+                        else if (amount == '650000') levelPage = 'tasks-level3.html';
+                        else levelPage = 'tasks-intern.html'; // default fallback
+                        // Intern access is free, so user can access tasks-intern.html by default without payment
+                        window.location.href = levelPage;
+                    }, 2500);
                 }
             });
     }, 3000);

@@ -72,3 +72,35 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Endpoint to submit a deposit request
+app.post('/api/deposit', async (req, res) => {
+  const { accountName, accountNumber, amount } = req.body;
+  if (!accountName || !accountNumber || !amount) {
+    return res.status(400).json({ error: 'Missing deposit info' });
+  }
+  try {
+    const deposits = db.collection('deposits');
+    const result = await deposits.insertOne({
+      accountName,
+      accountNumber,
+      amount,
+      status: 'pending',
+      createdAt: new Date()
+    });
+    res.json({ message: 'Deposit submitted', depositId: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Endpoint to get all pending deposits (for polling)
+app.get('/api/pending-deposits', async (req, res) => {
+  try {
+    const deposits = db.collection('deposits');
+    const results = await deposits.find({ status: 'pending' }).toArray();
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error' });
+  }
+});
