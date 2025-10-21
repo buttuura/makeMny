@@ -1,5 +1,5 @@
 // Simple admin approval JS
-const API_BASE = 'https://makemny-5.onrender.com';
+const API_BASE = 'https://makemny-6.onrender.com';
 
 function showMessage(msg, color = 'red') {
     const el = document.getElementById('message');
