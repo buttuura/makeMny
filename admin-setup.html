@@ -2,52 +2,241 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Password Setup</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Setup - GetCash</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f7f7fa; display: flex; align-items: center; justify-content: center; height: 100vh; }
-    .setup-container { background: #fff; padding: 2em 2.5em; border-radius: 16px; box-shadow: 0 8px 32px rgba(44,44,120,0.12); text-align: center; min-width: 320px; }
-    input[type="password"] { padding:0.7em; border-radius:8px; border:1px solid #ccc; width:80%; margin-top:0.5em; margin-bottom:1em; font-size:1em; }
-    button { margin-top:1em; padding:0.6em 1.5em; border-radius:8px; border:none; background:#2d2d7a; color:#fff; font-weight:600; cursor:pointer; }
-    button:hover { background:#1a1a4d; }
-    .error { color: red; margin-top: 1em; }
-    .success { color: green; margin-top: 1em; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .setup-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .setup-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .setup-header h1 {
+      color: #2d2d7a;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .setup-header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    input[type="tel"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="tel"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .setup-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+
+    .setup-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .setup-btn:active {
+      transform: translateY(0);
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .info-box {
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
   <div class="setup-container">
-    <h2 style="color:#2d2d7a;">Set Admin Password</h2>
-    <input type="password" id="adminSetupPassword" placeholder="Enter new admin password" />
-    <br>
-    <button id="setupBtn">Set Password</button>
-    <div id="setupMsg"></div>
+    <div class="setup-header">
+      <h1>Admin Setup</h1>
+      <p>Create your first admin account</p>
+    </div>
+
+    <div class="info-box">
+      <strong>⚠️ One-time setup:</strong> You can only create one admin account. After setup, you'll need to log in with these credentials to access admin features.
+    </div>
+
+    <form id="setupForm">
+      <div class="form-group">
+        <label for="phone">Admin Phone Number</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          name="phone" 
+          placeholder="+1234567890" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Admin Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter a strong password (min 6 characters)" 
+          required
+        >
+      </div>
+
+      <button type="submit" class="setup-btn" id="setupBtn">
+        Create Admin Account
+      </button>
+    </form>
+
+    <div id="message" class="message"></div>
   </div>
+
   <script>
-    // Use absolute API URL for Render deployment
-    const API_BASE = window.location.hostname.includes('render') ? 'https://makemny-6.onrender.com' : '';
-    document.getElementById('setupBtn').onclick = function() {
-      const pw = document.getElementById('adminSetupPassword').value;
-      if (!pw) {
-        document.getElementById('setupMsg').innerHTML = '<span class="error">Please enter a password.</span>';
+    const form = document.getElementById('setupForm');
+    const setupBtn = document.getElementById('setupBtn');
+    const messageDiv = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Validation
+      if (!phone || !password) {
+        showMessage('Please fill in all fields', 'error');
         return;
       }
-      fetch(API_BASE + '/api/admin/setup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pw })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.message) {
-          document.getElementById('setupMsg').innerHTML = '<span class="success">' + data.message + '</span>';
+
+      if (password.length < 6) {
+        showMessage('Password must be at least 6 characters', 'error');
+        return;
+      }
+
+      // Show loading state
+      setupBtn.classList.add('loading');
+      setupBtn.innerHTML = 'Creating...';
+
+      try {
+        const response = await fetch('/api/admin/setup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage('✅ Admin account created successfully! Redirecting to login...', 'success');
+          setTimeout(() => {
+            window.location.href = '/admin-approval.html';
+          }, 2000);
         } else {
-          document.getElementById('setupMsg').innerHTML = '<span class="error">' + (data.error || 'Setup failed') + '</span>';
+          showMessage(result.error || 'Setup failed', 'error');
         }
-      })
-      .catch(() => {
-        document.getElementById('setupMsg').innerHTML = '<span class="error">Setup failed</span>';
-      });
-    };
+      } catch (err) {
+        showMessage('Network error: ' + err.message, 'error');
+      } finally {
+        setupBtn.classList.remove('loading');
+        setupBtn.innerHTML = 'Create Admin Account';
+      }
+    });
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = 'message ' + type;
+    }
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
