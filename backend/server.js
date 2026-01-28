@@ -1,3 +1,22 @@
+// Simple Express backend for admin approval (MongoDB)
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { MongoClient, ObjectId } = require('mongodb');
+const path = require('path');
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+// Serve static files from the project root
+app.use(express.static(path.join(__dirname, '../')));
+
+// Route for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
 // Admin setup (one-time, phone number + password)
 app.post('/api/admin/setup', async (req, res) => {
   const { phone, password } = req.body;
@@ -27,28 +46,46 @@ app.post('/api/admin/login', async (req, res) => {
     res.status(500).json({ error: 'Database error' });
   }
 });
-// Simple Express backend for admin approval (MongoDB)
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { MongoClient, ObjectId } = require('mongodb');
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+// User login (phone number + password)
+app.post('/api/login', async (req, res) => {
+  const { phone, password } = req.body;
+  if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
+  try {
+    // Try to use MongoDB if connected, otherwise use in-memory test data
+    if (db) {
+      const users = db.collection('users');
+      const user = await users.findOne({ phone, password });
+      if (!user) return res.status(401).json({ error: 'Invalid phone or password' });
+    } else {
+      // In-memory test users (for when MongoDB is not connected)
+      const testUsers = [
+        { phone: '+1234567890', password: 'test123' },
+        { phone: '+9876543210', password: 'password123' }
+      ];
+      const user = testUsers.find(u => u.phone === phone && u.password === password);
+      if (!user) return res.status(401).json({ error: 'Invalid phone or password' });
+    }
+    // Simple session: return a token (not secure, for demo)
+    res.json({ token: 'user-token', phone });
+  } catch (err) {
+    res.status(500).json({ error: 'Database error' });
+  }
+});
 
-const MONGO_URL = process.env.MONGO_URL || 'mongodb+srv://delmedah_db_user:p10CTu9EKKSOhMVC@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URL = process.env.MONGO_URL || 'mongodb+srv://delmedah_db_user:Buttuura123@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const DB_NAME = process.env.DB_NAME || 'makemny';
 let db;
 
-MongoClient.connect(MONGO_URL, { useUnifiedTopology: true })
+MongoClient.connect(MONGO_URL)
   .then(client => {
     db = client.db(DB_NAME);
     console.log('Connected to MongoDB');
   })
   .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
+    console.error('MongoDB connection error:', err.message);
+    // Continue running server even if DB connection fails initially
+    console.log('Server will continue running, but DB operations may fail until connection is established');
   });
 
 app.get('/api/deposits', async (req, res) => {

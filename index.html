@@ -67,26 +67,18 @@
                         body: JSON.stringify({ phone, password })
                     });
                     const result = await response.json();
-                    if (response.ok) {
+                    if (response.ok && result.token === 'user-token') {
                         alert('Login successful!');
                         window.location.href = 'Welcomepage.html';
                     } else {
                         alert(result.error || 'Login failed');
                     }
                 } catch (err) {
-                    alert('Network error');
+                    console.error('Network error:', err);
+                    alert('Network error: ' + err.message);
                 }
             });
         });
         </script>
-
-    <script>
-        const { MongoClient } = require('mongodb');
-        const uri = "mongodb+srv://delmedah_db_user:<db_password>@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-        const client = new MongoClient(uri);
-    </script>
-    <script src="js/database.js"></script>
-    <script src="js/api-service.js"></script>
-    <script src="js/login-hybrid.js"></script>
 </body>
 </html>

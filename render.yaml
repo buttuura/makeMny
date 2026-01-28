@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: makemny-app
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: MONGO_URL
+        scope: build
+        sync: false
+      - key: DB_NAME
+        scope: build
+        value: makemny
+      - key: PORT
+        scope: build
+        value: 5000
