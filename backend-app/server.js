@@ -256,7 +256,7 @@ app.post('/api/login', async (req, res) => {
         const userId = user._id.toString();
         const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
         res.cookie('sid', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*3600*1000 });
-        res.json({ message: 'Login successful', user: { id: userId, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone } });
+        res.json({ token: 'user-token', message: 'Login successful', user: { id: userId, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone } });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error' });
