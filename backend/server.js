@@ -116,18 +116,34 @@ app.post('/api/login', requireDB, async (req, res) => {
   try {
     const users = db.collection('users');
     const user = await users.findOne({ phone });
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+    console.log('Login attempt for phone:', phone);
+    console.log('User found:', !!user);
+    
+    if (!user) {
+      console.log('User not found for phone:', phone);
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    console.log('User has passwordHash:', !!user.passwordHash);
+    console.log('User has password:', !!user.password);
     
     let ok = false;
     // Compare with bcrypt hash if present
     if (user.passwordHash) {
       ok = await bcrypt.compare(password, user.passwordHash);
+      console.log('Bcrypt comparison result:', ok);
     } else if (user.password) {
       // Legacy plaintext password — compare
       ok = password === user.password;
+      console.log('Plaintext comparison result:', ok);
+    } else {
+      console.log('No password field found on user');
     }
     
-    if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+    if (!ok) {
+      console.log('Password mismatch for user:', phone);
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
     
     // Create JWT token
     const token = jwt.sign({ sub: user._id.toString() }, JWT_SECRET, { expiresIn: '7d' });
@@ -135,7 +151,7 @@ app.post('/api/login', requireDB, async (req, res) => {
     res.json({ token: 'user-token', phone, userId: user._id.toString() });
   } catch (err) {
     console.error('User login error:', err);
-    res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ error: 'Database error: ' + err.message });
   }
 });
 
@@ -144,18 +160,24 @@ app.post('/api/register', requireDB, async (req, res) => {
   const { firstName, lastName, email, phone, password } = req.body;
   if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
   try {
+    console.log('Registration attempt for phone:', phone);
     const users = db.collection('users');
     const existing = await users.findOne({ phone });
     if (existing) {
+      console.log('User already exists:', phone);
       return res.status(400).json({ error: 'User already exists' });
     }
     
     // Hash password using bcrypt
+    console.log('Hashing password...');
     const passwordHash = await bcrypt.hash(password, 12);
+    console.log('Password hashed successfully');
+    
     const now = new Date();
     const user = { firstName: firstName || '', lastName: lastName || '', email: email || '', phone, passwordHash, createdAt: now };
     const result = await users.insertOne(user);
     const userId = result.insertedId.toString();
+    console.log('User registered successfully:', userId);
     
     // Create JWT token
     const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
@@ -163,7 +185,7 @@ app.post('/api/register', requireDB, async (req, res) => {
     res.status(201).json({ message: 'Registration successful', user: { id: userId, firstName, lastName, email, phone } });
   } catch (err) {
     console.error('Registration error:', err);
-    res.status(500).json({ error: 'Database error' });
+    res.status(500).json({ error: 'Database error: ' + err.message });
   }
 });
 
