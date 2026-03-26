@@ -112,15 +112,28 @@ app.post('/api/admin/login', requireDB, async (req, res) => {
 // User login (phone number + password)
 app.post('/api/login', requireDB, async (req, res) => {
   const { phone, password } = req.body;
+  console.log('Raw request body:', req.body);
+  console.log('Phone (quoted):', `"${phone}"`);
+  console.log('Phone length:', phone?.length);
+  console.log('Phone type:', typeof phone);
+  
   if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
   try {
     const users = db.collection('users');
+    
+    // Find user and show all users with similar phones
+    const allUsers = await users.find({}).toArray();
+    console.log('Total users in database:', allUsers.length);
+    allUsers.forEach((u, i) => {
+      console.log(`User ${i}:`, { phone: `"${u.phone}"`, hasHash: !!u.passwordHash });
+    });
+    
     const user = await users.findOne({ phone });
-    console.log('Login attempt for phone:', phone);
+    console.log('Login attempt for phone:', `"${phone}"`);
     console.log('User found:', !!user);
     
     if (!user) {
-      console.log('User not found for phone:', phone);
+      console.log('User not found for phone:', `"${phone}"`);
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     
