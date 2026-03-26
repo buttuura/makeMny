@@ -4,16 +4,21 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Serve static files from the project root
 app.use(express.static(path.join(__dirname, '../')));
 
 const MONGO_URL = process.env.MONGO_URL || 'mongodb+srv://delmedah_db_user:Buttuura123@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const DB_NAME = process.env.DB_NAME || 'makemny';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 let db;
 let dbConnected = false;
 
@@ -38,6 +43,33 @@ function requireDB(req, res, next) {
     return res.status(503).json({ error: 'Database connection unavailable' });
   }
   next();
+}
+
+// Auth middleware
+function requireAuth(req, res, next) {
+  const token = req.cookies?.sid;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.userId = payload.sub;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+// Admin check middleware
+async function requireAdmin(req, res, next) {
+  try {
+    const admins = db.collection('admins');
+    const admin = await admins.findOne({ _id: new ObjectId(req.userId) });
+    if (!admin) {
+      return res.status(403).json({ error: 'Admin required' });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error' });
+  }
 }
 
 // Route for root path
@@ -83,12 +115,54 @@ app.post('/api/login', requireDB, async (req, res) => {
   if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
   try {
     const users = db.collection('users');
-    const user = await users.findOne({ phone, password });
-    if (!user) return res.status(401).json({ error: 'Invalid phone or password' });
-    // Simple session: return a token (not secure, for demo)
-    res.json({ token: 'user-token', phone });
+    const user = await users.findOne({ phone });
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+    
+    let ok = false;
+    // Compare with bcrypt hash if present
+    if (user.passwordHash) {
+      ok = await bcrypt.compare(password, user.passwordHash);
+    } else if (user.password) {
+      // Legacy plaintext password — compare
+      ok = password === user.password;
+    }
+    
+    if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+    
+    // Create JWT token
+    const token = jwt.sign({ sub: user._id.toString() }, JWT_SECRET, { expiresIn: '7d' });
+    res.cookie('sid', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*3600*1000 });
+    res.json({ token: 'user-token', phone, userId: user._id.toString() });
   } catch (err) {
     console.error('User login error:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// User registration endpoint
+app.post('/api/register', requireDB, async (req, res) => {
+  const { firstName, lastName, email, phone, password } = req.body;
+  if (!phone || !password) return res.status(400).json({ error: 'Missing phone or password' });
+  try {
+    const users = db.collection('users');
+    const existing = await users.findOne({ phone });
+    if (existing) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+    
+    // Hash password using bcrypt
+    const passwordHash = await bcrypt.hash(password, 12);
+    const now = new Date();
+    const user = { firstName: firstName || '', lastName: lastName || '', email: email || '', phone, passwordHash, createdAt: now };
+    const result = await users.insertOne(user);
+    const userId = result.insertedId.toString();
+    
+    // Create JWT token
+    const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '7d' });
+    res.cookie('sid', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7*24*3600*1000 });
+    res.status(201).json({ message: 'Registration successful', user: { id: userId, firstName, lastName, email, phone } });
+  } catch (err) {
+    console.error('Registration error:', err);
     res.status(500).json({ error: 'Database error' });
   }
 });
