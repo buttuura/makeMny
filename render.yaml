@@ -7,11 +7,11 @@ services:
     startCommand: node backend/server.js
     envVars:
       - key: MONGO_URL
-        scope: build
+        scope: runtime
         sync: false
       - key: DB_NAME
-        scope: build
+        scope: runtime
         value: makemny
       - key: PORT
-        scope: build
+        scope: runtime
         value: 5000

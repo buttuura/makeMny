@@ -33,13 +33,17 @@ git push origin master
    - **Plan**: Free (or paid for production)
 
 ### Step 4: Add Environment Variables
-In the Render dashboard, go to **Environment** and add:
+In the Render dashboard, go to **Environment** tab and add:
 
 ```
 MONGO_URL=mongodb+srv://delmedah_db_user:Buttuura123@cluster0.od3sa0a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 DB_NAME=makemny
+
+PORT=5000
 ```
+
+**Important**: These variables must be added in the Render dashboard, NOT hardcoded in render.yaml. Only `DB_NAME` and `PORT` defaults are in render.yaml. Your `MONGO_URL` (with credentials) should ONLY be set in the dashboard environment.
 
 ### Step 5: Deploy
 Click **Create Web Service** and Render will automatically deploy your app.
